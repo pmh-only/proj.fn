@@ -50,6 +50,13 @@ resource "aws_lambda_function" "main" {
   role = aws_iam_role.lambda.arn
   handler = "main.handler"
   runtime = "nodejs20.x"
+
+  environment {
+    variables = {
+      DISCORD_BOT_TOKEN = var.discord_bot_token
+      DISCORD_PUBLIC_KEY = var.discord_public_key
+    }
+  }
 }
 
 resource "aws_lambda_permission" "apigw" {
