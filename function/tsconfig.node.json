@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "allowJs": true
+  },
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*.ts", ".eslintrc.js", "main.mjs", "rollup.config.js"],
+  "exclude": ["dist", "node_modules"]
+}

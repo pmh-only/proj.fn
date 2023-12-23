@@ -22,10 +22,23 @@ resource "aws_iam_role" "lambda" {
   ]
 }
 
+resource "terraform_data" "lambda_dependency_resolve" {
+  triggers_replace = timestamp()
+  
+  provisioner "local-exec" {
+    working_dir = "../function"
+    command = "npm run build"
+  }
+}
+
 data "archive_file" "main" {
   type = "zip"
-  source_dir = "../function"
-  output_path = "../dist/function.zip"
+  source_file = "../function/main.mjs"
+  output_path = "../function/dist.zip"
+
+  depends_on = [
+    terraform_data.lambda_dependency_resolve
+  ]
 }
 
 resource "aws_lambda_function" "main" {
@@ -36,7 +49,7 @@ resource "aws_lambda_function" "main" {
   function_name = "projfn-lambda"
   role = aws_iam_role.lambda.arn
   handler = "main.handler"
-  runtime = "nodejs16.x"
+  runtime = "nodejs20.x"
 }
 
 resource "aws_lambda_permission" "apigw" {
