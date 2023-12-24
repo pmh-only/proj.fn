@@ -1,5 +1,5 @@
 import { type APIGatewayProxyCallbackV2, type APIGatewayProxyEventV2 } from 'aws-lambda'
-import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong, type APIInteractionResponseChannelMessageWithSource } from 'discord-api-types/payloads/v10'
+import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong, type APIInteractionResponseChannelMessageWithSource, ApplicationCommandType, type APIChatInputApplicationCommandGuildInteraction } from 'discord-api-types/payloads/v10'
 
 import { verifyEvent } from './crypto/verify'
 import { signResult } from './crypto/sign'
@@ -30,7 +30,7 @@ export const handler = async (
     })))
   }
 
-  if (interaction.type === InteractionType.ApplicationCommand) {
+  if (interaction.type === InteractionType.ApplicationCommand && interaction.data.type === ApplicationCommandType.ChatInput) {
     if (interaction.guild_id === undefined) {
       callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
         type: InteractionResponseType.ChannelMessageWithSource,
@@ -48,7 +48,7 @@ export const handler = async (
       return
     }
 
-    await resolvedCommand.run(interaction, callback)
+    await resolvedCommand.run(interaction as APIChatInputApplicationCommandGuildInteraction, callback)
       .catch((err: Error) => {
         console.error(err)
         callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({

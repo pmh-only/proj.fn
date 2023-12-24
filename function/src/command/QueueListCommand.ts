@@ -1,12 +1,12 @@
 import { type APIGatewayProxyCallbackV2 } from 'aws-lambda'
-import { ApplicationCommandType, type APIApplicationCommand, type APIApplicationCommandInteraction, type APIInteractionResponseChannelMessageWithSource, InteractionResponseType } from 'discord-api-types/v10'
+import { ApplicationCommandType, type APIApplicationCommand, type APIInteractionResponseChannelMessageWithSource, InteractionResponseType, type APIChatInputApplicationCommandGuildInteraction } from 'discord-api-types/v10'
 import { type Command } from './Command'
 import { signResult } from '../crypto/sign'
 import { listQueue } from '../queuing/listQueue'
 
 export class QueueListCommand implements Command {
-  public run = async (interaction: APIApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2): Promise<void> => {
-    const queue = await listQueue(interaction.guild_id ?? '')
+  public run = async (interaction: APIChatInputApplicationCommandGuildInteraction, callback: APIGatewayProxyCallbackV2): Promise<void> => {
+    const queue = await listQueue(interaction.guild_id)
 
     if (queue.length < 1) {
       callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({

@@ -1,14 +1,13 @@
 export type Queue = QueueItem[]
 
 export interface QueueItem {
-  guildId: number
-  queueId: number // queue created at
-  adderId: number
-  musicUrl: string
+  guildId: string
+  queueId: string // queue created at
+  adderId: string
+  videoId: string
+  musicEmbed: string // in json
   musicTitle: string
-  musicThumbnailUrl: string
   musicCreator: string
-  musicDescription: string
-  musicDuration: number // in seconds
+  musicDuration: number // in second
   musicCurrentTime: number // in seconds
 }
