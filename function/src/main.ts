@@ -1,5 +1,5 @@
 import { type APIGatewayProxyCallbackV2, type APIGatewayProxyEventV2 } from 'aws-lambda'
-import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong } from 'discord-api-types/payloads/v10'
+import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong, type APIInteractionResponseChannelMessageWithSource } from 'discord-api-types/payloads/v10'
 
 import { verifyEvent } from './crypto/verify'
 import { signResult } from './crypto/sign'
@@ -31,6 +31,16 @@ export const handler = async (
   }
 
   if (interaction.type === InteractionType.ApplicationCommand) {
+    if (interaction.guild_id === undefined) {
+      callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+          content: 'This service only works on Servers, not DM.'
+        }
+      }))
+      return
+    }
+
     const resolvedCommand = resolveCommand(interaction.data.name)
     if (resolvedCommand === undefined) {
       console.error('invalid request command')
@@ -38,7 +48,18 @@ export const handler = async (
       return
     }
 
-    resolvedCommand.run(interaction, callback)
+    await resolvedCommand.run(interaction, callback)
+      .catch((err: Error) => {
+        console.error(err)
+        callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
+          type: InteractionResponseType.ChannelMessageWithSource,
+          data: {
+            content: `Error: ${err.name}: ${err.message}\`\`\`${err.stack}\`\`\``
+          }
+        }))
+      })
+
+    return
   }
 
   console.error('invalid request type')

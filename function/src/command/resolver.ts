@@ -1,8 +1,10 @@
 import { type CommandConstructor, type Command } from './Command'
 import { PingCommand } from './PingCommand'
+import { QueueListCommand } from './QueueListCommand'
 
 const commands: Record<string, CommandConstructor> = {
-  ping: PingCommand
+  ping: PingCommand,
+  queue: QueueListCommand
 }
 
 export const resolveCommand = (name: string): Command | undefined =>

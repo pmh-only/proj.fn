@@ -10,9 +10,9 @@ if (require.main !== module) {
 
 void (async () => {
   const savedMetadataCollection =
-    JSON.stringify(
-      await readFile('dist/metadataCollection_saved.json')
-        .catch(() => '{}'))
+    await readFile('dist/metadataCollection_saved.json')
+      .then((res) => res.toString('utf-8'))
+      .catch(() => '{}')
 
   const metadataCollection =
     JSON.stringify(

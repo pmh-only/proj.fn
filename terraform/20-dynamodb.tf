@@ -18,7 +18,10 @@ resource "aws_dynamodb_table" "queue" {
   }
 
   lifecycle {
-    ignore_changes = [replica]
+    ignore_changes = [
+      replica,
+      stream_enabled
+    ]
   }
 }
 

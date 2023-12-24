@@ -4,7 +4,7 @@ import 'discord-api-types/rest/v10/interactions'
 
 export interface Command {
   getMetadata: () => Partial<APIApplicationCommand>
-  run: (interaction: APIApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2) => any
+  run: (interaction: APIApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2) => Promise<any>
 }
 
 export type CommandConstructor =

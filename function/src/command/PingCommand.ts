@@ -5,7 +5,7 @@ import { type Command } from './Command'
 import { signResult } from '../crypto/sign'
 
 export class PingCommand implements Command {
-  public run = (_: APIApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2): any => {
+  public run = async (_: APIApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2): Promise<any> => {
     callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
       type: InteractionResponseType.ChannelMessageWithSource,
       data: {

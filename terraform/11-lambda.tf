@@ -31,7 +31,8 @@ resource "aws_iam_role_policy" "lambda" {
       {
         Action = [
           "dynamodb:GetItem",
-          "dynamodb:PutItem"
+          "dynamodb:PutItem",
+          "dynamodb:Scan"
         ]
         Effect   = "Allow"
         Resource = aws_dynamodb_table.queue.arn

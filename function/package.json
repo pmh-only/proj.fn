@@ -4,10 +4,12 @@
     "command_regist": "rollup -c rollups/command_register.config.js --bundleConfigAsCjs && node dist/command_register.cjs"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.478.0",
     "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.5",
     "@types/aws-lambda": "^8.10.130",
