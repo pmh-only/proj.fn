@@ -22,25 +22,6 @@ resource "aws_iam_role" "lambda" {
   ]
 }
 
-resource "terraform_data" "lambda_dependency_resolve" {
-  triggers_replace = timestamp()
-  
-  provisioner "local-exec" {
-    working_dir = "../function"
-    command = "npm run build"
-  }
-}
-
-data "archive_file" "main" {
-  type = "zip"
-  source_file = "../function/main.mjs"
-  output_path = "../function/dist.zip"
-
-  depends_on = [
-    terraform_data.lambda_dependency_resolve
-  ]
-}
-
 resource "aws_lambda_function" "main" {
   provider = aws.california
   filename = data.archive_file.main.output_path
@@ -64,6 +45,6 @@ resource "aws_lambda_permission" "apigw" {
   function_name = aws_lambda_function.main.function_name
   source_arn = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
 
-  action        = "lambda:InvokeFunction"
-  principal     = "apigateway.amazonaws.com"
+  action = "lambda:InvokeFunction"
+  principal = "apigateway.amazonaws.com"
 }

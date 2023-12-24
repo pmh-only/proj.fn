@@ -1,7 +1,7 @@
 {
-  "type": "module",
   "scripts": {
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollups/main.config.js --bundleConfigAsCjs",
+    "command_regist": "rollup -c rollups/command_register.config.js --bundleConfigAsCjs && node dist/command_register.cjs"
   },
   "dependencies": {
     "tweetnacl": "^1.0.3"
@@ -21,6 +21,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "rollup": "^4.9.1",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "undici": "^6.2.1"
   }
 }

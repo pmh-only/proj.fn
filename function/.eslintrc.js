@@ -15,7 +15,7 @@ module.exports = {
       files: [
         '.eslintrc.js',
         'main.mjs',
-        'rollup.config.js'
+        'rollups/**/*.js'
       ],
       parserOptions: {
         sourceType: 'script',

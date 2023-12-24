@@ -3,6 +3,7 @@ import { InteractionType, type APIInteraction, InteractionResponseType, type API
 
 import { verifyEvent } from './crypto/verify'
 import { signResult } from './crypto/sign'
+import { resolveCommand } from './command/resolver'
 
 export const handler = async (
   event: APIGatewayProxyEventV2, _: unknown,
@@ -27,6 +28,17 @@ export const handler = async (
     callback(null, signResult<APIInteractionResponsePong>(({
       type: InteractionResponseType.Pong
     })))
+  }
+
+  if (interaction.type === InteractionType.ApplicationCommand) {
+    const resolvedCommand = resolveCommand(interaction.data.name)
+    if (resolvedCommand === undefined) {
+      console.error('invalid request command')
+      callback(null, signResult('invalid request type', 400))
+      return
+    }
+
+    resolvedCommand.run(interaction, callback)
   }
 
   console.error('invalid request type')

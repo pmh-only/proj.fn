@@ -11,9 +11,8 @@
     "noImplicitAny": true,
     "alwaysStrict": true,
     "skipLibCheck": true,
-    "rootDir": "./src",
     "moduleResolution": "Node"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "utils/**/*.ts"],
   "exclude": ["dist", "node_modules"]
 }

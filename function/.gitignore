@@ -131,5 +131,3 @@ dist
 
 # custom
 .rollup.cache
-main.mjs
-dist.zip
