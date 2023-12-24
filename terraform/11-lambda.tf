@@ -50,6 +50,7 @@ resource "aws_lambda_function" "main" {
   role = aws_iam_role.lambda.arn
   handler = "main.handler"
   runtime = "nodejs20.x"
+  timeout = 60
 
   environment {
     variables = {

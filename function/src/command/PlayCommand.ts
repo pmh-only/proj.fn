@@ -18,7 +18,7 @@ export class PlayCommand implements Command {
     // Display search results
     if (videoId?.type === ApplicationCommandOptionType.String) {
       const { videoDetails } = await getBasicInfo(videoId.value)
-        .catch((v) => ({ videoDetails: undefined }))
+        .catch(() => ({ videoDetails: undefined }))
 
       if (videoDetails === undefined) {
         callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
@@ -40,7 +40,7 @@ export class PlayCommand implements Command {
         author: {
           name: videoDetails.author.name,
           url: videoDetails.author.user_url,
-          icon_url: videoDetails.author.avatar
+          icon_url: videoDetails.author.thumbnails?.[0].url
         },
         image: {
           url: videoDetails.thumbnails.sort((a, b) => a.height - b.height).reverse()[0].url

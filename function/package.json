@@ -6,7 +6,8 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.478.0",
     "tweetnacl": "^1.0.3",
-    "ytdl-core": "^4.11.5"
+    "ytdl-core": "^4.11.5",
+    "ytsr": "^3.8.4"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",

@@ -1,9 +1,12 @@
+import './init'
+
 import { type APIGatewayProxyCallbackV2, type APIGatewayProxyEventV2 } from 'aws-lambda'
-import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong, type APIInteractionResponseChannelMessageWithSource, ApplicationCommandType, type APIChatInputApplicationCommandGuildInteraction } from 'discord-api-types/payloads/v10'
+import { InteractionType, type APIInteraction, InteractionResponseType, type APIInteractionResponsePong, type APIInteractionResponseChannelMessageWithSource, ApplicationCommandType, type APIChatInputApplicationCommandGuildInteraction, ApplicationCommandOptionType, type APIApplicationCommandInteractionDataStringOption, type APIApplicationCommandAutocompleteResponse } from 'discord-api-types/payloads/v10'
 
 import { verifyEvent } from './crypto/verify'
 import { signResult } from './crypto/sign'
 import { resolveCommand } from './command/resolver'
+import { resolveAutocompleter } from './autocompleter/resolver'
 
 export const handler = async (
   event: APIGatewayProxyEventV2, _: unknown,
@@ -55,6 +58,37 @@ export const handler = async (
           type: InteractionResponseType.ChannelMessageWithSource,
           data: {
             content: `Error: ${err.name}: ${err.message}\`\`\`${err.stack}\`\`\``
+          }
+        }))
+      })
+
+    return
+  }
+
+  if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
+    const stringOptions = interaction.data.options.filter((v) => v.type === ApplicationCommandOptionType.String) as APIApplicationCommandInteractionDataStringOption[]
+    const focusedStringOption = stringOptions.find((v) => v.focused === true)
+
+    if (focusedStringOption === undefined) {
+      console.error('None of the options is focused.')
+      callback(null, signResult('invalid request type', 400))
+      return
+    }
+
+    const resolvedAutocompleter = resolveAutocompleter(focusedStringOption.name)
+    if (resolvedAutocompleter === undefined) {
+      console.error('invalid request autocompleter')
+      callback(null, signResult('invalid request autocompleter', 400))
+      return
+    }
+
+    await resolvedAutocompleter.run(interaction, callback)
+      .catch((err: Error) => {
+        console.error(err)
+        callback(null, signResult<APIApplicationCommandAutocompleteResponse>({
+          type: InteractionResponseType.ApplicationCommandAutocompleteResult,
+          data: {
+            choices: []
           }
         }))
       })
