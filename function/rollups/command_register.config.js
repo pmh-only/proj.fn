@@ -9,7 +9,9 @@ export default {
     file: 'dist/command_register.cjs'
   },
   plugins: [
-    typescript(),
+    typescript({
+      outputToFilesystem: true
+    }),
     nodeResolve(),
     commonjs()
   ]

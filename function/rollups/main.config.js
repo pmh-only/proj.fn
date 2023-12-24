@@ -9,7 +9,9 @@ export default {
     file: 'dist/main.mjs'
   },
   plugins: [
-    typescript(),
+    typescript({
+      outputToFilesystem: true
+    }),
     nodeResolve(),
     commonjs()
   ]

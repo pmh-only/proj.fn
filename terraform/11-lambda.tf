@@ -22,6 +22,24 @@ resource "aws_iam_role" "lambda" {
   ]
 }
 
+resource "aws_iam_role_policy" "lambda" {
+  name = "projfn-policy-lambda"
+  role = aws_iam_role.lambda.name
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "dynamodb:GetItem",
+          "dynamodb:PutItem"
+        ]
+        Effect   = "Allow"
+        Resource = aws_dynamodb_table.queue.arn
+      }
+    ]
+  })
+}
+
 resource "aws_lambda_function" "main" {
   provider = aws.california
   filename = data.archive_file.main.output_path
