@@ -1,18 +1,18 @@
-import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb'
+import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb'
 import { type Queue } from './Queue'
 
 export const listQueue = async (guildId: string): Promise<Queue> => {
   const client = new DynamoDBClient({})
 
-  const scanCommand = new ScanCommand({
+  const queryCommand = new QueryCommand({
     TableName: 'projfn-music-queue',
-    FilterExpression: 'GuildId = :guildId',
+    KeyConditionExpression: 'GuildId = :guildId',
     ExpressionAttributeValues: {
       ':guildId': { N: guildId }
     }
   })
 
-  const { Items = [] } = await client.send(scanCommand)
+  const { Items = [] } = await client.send(queryCommand)
 
   return Items.map((item) => ({
     guildId: item.GuildId.N ?? '0',
