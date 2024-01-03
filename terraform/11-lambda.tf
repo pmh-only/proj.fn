@@ -51,6 +51,7 @@ resource "aws_lambda_function" "main" {
   handler = "main.handler"
   runtime = "nodejs20.x"
   timeout = 60
+  memory_size = 512
 
   environment {
     variables = {
