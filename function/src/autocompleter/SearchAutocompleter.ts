@@ -21,7 +21,7 @@ export class SearchAutocompleter implements Autocompleter {
     const searchResult = await ytsr(searchQuery, {
       limit: 10,
       gl: 'ko'
-    })
+    }).catch(() => ({ items: [] }))
 
     const choices: APIApplicationCommandOptionChoice[] = (searchResult
       .items
