@@ -37,6 +37,7 @@ export const playNextQueueItem = async (moon: MoonlinkManager, player: MoonlinkP
   }
 
   const durationUpdater = setInterval((): void => {
+    console.log(player.data)
     clearInterval(durationUpdater)
   }, 1000)
 }
