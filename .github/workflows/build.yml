@@ -33,6 +33,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
+          context: container
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/pmh-only/projfn:latest
           cache-from: type=gha
