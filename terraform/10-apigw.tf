@@ -1,12 +1,9 @@
 resource "aws_apigatewayv2_api" "main" {
-  provider = aws.california
-
   name = "projfn-apigw"
   protocol_type = "HTTP"
 }
 
 resource "aws_apigatewayv2_stage" "main" {
-  provider = aws.california
   api_id = aws_apigatewayv2_api.main.id
 
   name = "$default"
@@ -14,7 +11,6 @@ resource "aws_apigatewayv2_stage" "main" {
 }
 
 resource "aws_apigatewayv2_route" "main" {
-  provider = aws.california
   api_id = aws_apigatewayv2_api.main.id
 
   route_key = "POST /endpoint"
@@ -22,7 +18,6 @@ resource "aws_apigatewayv2_route" "main" {
 }
 
 resource "aws_apigatewayv2_integration" "main" {
-  provider = aws.california
   api_id = aws_apigatewayv2_api.main.id
 
   integration_type = "AWS_PROXY"

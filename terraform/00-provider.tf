@@ -13,13 +13,7 @@ terraform {
 }
 
 provider "aws" {
-  alias = "california"
   region = "us-west-1"
-}
-
-provider "aws" {
-  alias = "seoul"
-  region = "ap-northeast-2"
 }
 
 provider "archive" {

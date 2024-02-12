@@ -1,6 +1,4 @@
 data "aws_iam_policy_document" "lambda_assume_role" {
-  provider = aws.california
-
   statement {
     effect = "Allow"
 
@@ -32,17 +30,38 @@ resource "aws_iam_role_policy" "lambda" {
         Action = [
           "dynamodb:GetItem",
           "dynamodb:PutItem",
-          "dynamodb:Scan"
+          "dynamodb:Query"
         ]
         Effect   = "Allow"
-        Resource = aws_dynamodb_table.queue.arn
+        Resource = [
+          aws_dynamodb_table.queue.arn,
+          aws_dynamodb_table.workers.arn
+        ]
+      },
+      {
+        Action = [
+          "ecs:RunTask"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:task-definition/projfn-taskdef"
+        ]
+      },
+      {
+        Action = [
+          "iam:PassRole"
+        ]
+        Effect = "Allow"
+        Resource = [
+          aws_iam_role.task.arn,
+          aws_iam_role.taskexec.arn
+        ]
       }
     ]
   })
 }
 
 resource "aws_lambda_function" "main" {
-  provider = aws.california
   filename = data.archive_file.main.output_path
   source_code_hash = data.archive_file.main.output_base64sha256
 
@@ -57,12 +76,12 @@ resource "aws_lambda_function" "main" {
     variables = {
       DISCORD_BOT_TOKEN = var.discord_bot_token
       DISCORD_PUBLIC_KEY = var.discord_public_key
+      REGIONAL_DATA = local.regional_data
     }
   }
 }
 
 resource "aws_lambda_permission" "apigw" {
-  provider = aws.california
   function_name = aws_lambda_function.main.function_name
   source_arn = "${aws_apigatewayv2_api.main.execution_arn}/*/*"
 

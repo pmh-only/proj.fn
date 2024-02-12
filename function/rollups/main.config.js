@@ -8,7 +8,8 @@ export default {
   input: './src/main.ts',
   output: {
     format: 'es',
-    file: 'dist/main.mjs'
+    file: 'dist/main.mjs',
+    inlineDynamicImports: true
   },
   plugins: [
     typescript({

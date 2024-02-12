@@ -27,6 +27,7 @@ resource "terraform_data" "lambda_command_regist" {
       DISCORD_APPLICATION_ID = var.discord_application_id
       DISCORD_BOT_TOKEN = nonsensitive(var.discord_bot_token)
       TARGET_GUILD_ID = var.discord_target_guild_id
+      REGIONAL_DATA = local.regional_data
     }
   }
 }

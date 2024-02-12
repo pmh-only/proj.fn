@@ -7,7 +7,8 @@ export default {
   input: './utils/command_register.ts',
   output: {
     format: 'commonjs',
-    file: 'dist/command_register.cjs'
+    file: 'dist/command_register.cjs',
+    inlineDynamicImports: true
   },
   plugins: [
     typescript({

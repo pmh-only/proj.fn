@@ -1,6 +1,4 @@
 resource "aws_dynamodb_table" "queue" {
-  provider = aws.california
-
   name = "projfn-music-queue"
   billing_mode = "PAY_PER_REQUEST"
 
@@ -25,7 +23,21 @@ resource "aws_dynamodb_table" "queue" {
   }
 }
 
-resource "aws_dynamodb_table_replica" "queue" {
-  provider = aws.seoul
-  global_table_arn = aws_dynamodb_table.queue.arn
+resource "aws_dynamodb_table" "workers" {
+  name = "projfn-music-workers"
+  billing_mode = "PAY_PER_REQUEST"
+
+  hash_key = "GuildId"
+
+  attribute {
+    name = "GuildId"
+    type = "N"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      replica,
+      stream_enabled
+    ]
+  }
 }

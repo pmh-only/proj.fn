@@ -4,6 +4,8 @@ import { type Command } from './Command'
 import { signResult } from '../crypto/sign'
 import { getBasicInfo } from 'ytdl-core'
 import { addQueue } from '../queuing/addQueue'
+import { checkWorkerAvailability } from '../worker/checkWorkerAvailability'
+import { createWorker } from '../worker/createWorker'
 
 export class PlayCommand implements Command {
   public run = async (interaction: APIChatInputApplicationCommandInteraction, callback: APIGatewayProxyCallbackV2): Promise<any> => {
@@ -11,6 +13,18 @@ export class PlayCommand implements Command {
 
     if (videoId === undefined) {
       // TODO: unpause music
+
+      const isWorkerAvailable = await checkWorkerAvailability(interaction.guild_id ?? '')
+      if (!isWorkerAvailable) {
+        await createWorker(interaction.guild_id ?? '', '', 'ap-northeast-2')
+      }
+
+      callback(null, signResult<APIInteractionResponseChannelMessageWithSource>({
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+          content: 'Ready'
+        }
+      }))
 
       return
     }

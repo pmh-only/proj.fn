@@ -29,3 +29,5 @@ variable "discord_target_guild_id" {
   default = "global"
   nullable = false
 }
+
+data "aws_caller_identity" "current" {}
