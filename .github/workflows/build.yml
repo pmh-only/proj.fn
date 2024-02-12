@@ -3,6 +3,8 @@ name: 'Check updates and build'
 on:
   workflow_dispatch:
   push:
+    paths:
+      - 'worker/**'
 
 permissions:
   contents: write
@@ -33,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: container
+          context: worker
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/pmh-only/projfn:latest
           cache-from: type=gha
