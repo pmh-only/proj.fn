@@ -49,6 +49,15 @@ resource "aws_iam_role_policy" "lambda_commander" {
       },
       {
         Action = [
+          "ecs:DescribeTasks"
+        ]
+        Effect = "Allow"
+        Resource = [
+          "arn:aws:ecs:*:${data.aws_caller_identity.current.account_id}:task/projfn-cluster/*"
+        ]
+      },
+      {
+        Action = [
           "iam:PassRole"
         ]
         Effect = "Allow"
@@ -78,6 +87,7 @@ resource "aws_lambda_function" "commander" {
     variables = {
       DISCORD_APPLICATION_ID = var.discord_application_id
       DISCORD_BOT_TOKEN = var.discord_bot_token
+      REGIONAL_DATA = local.regional_data
     }
   }
 }

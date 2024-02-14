@@ -12,6 +12,7 @@ export const checkWorkerAvailability = async (guildId: string): Promise<boolean>
   })
 
   const describeTaskCommand = new DescribeTasksCommand({
+    cluster: 'projfn-cluster',
     tasks: [
       worker.taskArn
     ]
