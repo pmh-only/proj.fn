@@ -1,4 +1,4 @@
-import { ApplicationCommandType, type APIApplicationCommand, ApplicationCommandOptionType, type APIChatInputApplicationCommandInteraction } from 'discord-api-types/v10'
+import { ApplicationCommandType, type APIApplicationCommand, ApplicationCommandOptionType, type APIChatInputApplicationCommandGuildInteraction } from 'discord-api-types/v10'
 import { type Command } from '../Command'
 import { getBasicInfo } from 'ytdl-core'
 import { addQueue } from '../queuing/addQueue'
@@ -7,15 +7,19 @@ import { createWorker } from '../worker/createWorker'
 import { editOriginalRespond } from '../responder/editOriginalRespond'
 
 export class PlayCommand implements Command {
-  public run = async (interaction: APIChatInputApplicationCommandInteraction): Promise<any> => {
+  public run = async (interaction: APIChatInputApplicationCommandGuildInteraction): Promise<any> => {
     const videoId = interaction.data.options?.find((v) => v.name === 'search')
 
     if (videoId === undefined) {
       // TODO: unpause music
 
-      const isWorkerAvailable = await checkWorkerAvailability(interaction.guild_id ?? '')
+      const isWorkerAvailable = await checkWorkerAvailability(interaction.guild_id)
       if (!isWorkerAvailable) {
-        await createWorker(interaction.guild_id ?? '', '', 'ap-northeast-2')
+        await createWorker(
+          interaction.guild_id,
+          interaction.member.user.id,
+          'ap-northeast-2'
+        )
       }
 
       await editOriginalRespond(interaction.token, {

@@ -2,7 +2,7 @@ import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import { ECSClient, RunTaskCommand } from '@aws-sdk/client-ecs'
 const { DISCORD_BOT_TOKEN, REGIONAL_DATA } = process.env
 
-export const createWorker = async (guildId: string, channelId: string, region: string): Promise<void> => {
+export const createWorker = async (guildId: string, memberId: string, region: string): Promise<void> => {
   const regionalData = JSON.parse(REGIONAL_DATA ?? '')[region]
   const ecsClient = new ECSClient({
     region
@@ -18,7 +18,7 @@ export const createWorker = async (guildId: string, channelId: string, region: s
         environment: [
           { name: 'DISCORD_TOKEN', value: DISCORD_BOT_TOKEN },
           { name: 'GUILD_ID', value: guildId },
-          { name: 'CHANNEL_ID', value: channelId }
+          { name: 'MEMBER_ID', value: memberId }
         ]
       }]
     },
