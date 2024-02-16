@@ -42,6 +42,8 @@ client.once('ready', async (client) => {
   const targetMember = await targetGuild.members.fetch(MEMBER_ID)
   const targetChannel = targetMember.voice.channelId
 
+  console.log('tagetChannel', targetChannel)
+
   if (targetChannel === null) {
     void client.destroy()
     return
@@ -56,9 +58,8 @@ client.once('ready', async (client) => {
     autoPlay: false
   })
 
-  moon.once('playerCreated', () => {
-    void playNextQueueItem(moon, player)
-  })
+  console.log('player created')
+  void playNextQueueItem(moon, player)
 })
 
 moon.on('trackEnd', (player) => {
