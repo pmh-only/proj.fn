@@ -49,17 +49,15 @@ client.once('ready', async (client) => {
 
   moon.init(client.user.id)
 
-  moon.once('nodeCreate', () => {
-    const player = moon.players.create({
-      guildId: GUILD_ID,
-      voiceChannel: targetChannel,
-      textChannel: targetChannel,
-      autoPlay: false
-    })
+  const player = moon.players.create({
+    guildId: GUILD_ID,
+    voiceChannel: targetChannel,
+    textChannel: targetChannel,
+    autoPlay: false
+  })
 
-    moon.once('playerCreated', () => {
-      void playNextQueueItem(moon, player)
-    })
+  moon.once('playerCreated', () => {
+    void playNextQueueItem(moon, player)
   })
 })
 
