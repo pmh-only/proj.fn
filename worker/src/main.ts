@@ -14,8 +14,15 @@ const isEnvProperlyProvided =
   MEMBER_ID !== ''
 
 if (!isEnvProperlyProvided) {
-  console.error('DISCORD_TOKEN, GUILD_ID or CHANNEL_ID environment variable is not provided.')
+  console.error('DISCORD_TOKEN, GUILD_ID or MEMBER_ID environment variable is not provided.')
   process.exit(1)
+}
+
+const nodeMetadata: INode = {
+  host: 'lavalink',
+  port: 2333,
+  secure: true,
+  password: 'password'
 }
 
 const client = new Client({
@@ -26,26 +33,11 @@ const client = new Client({
   ]
 })
 
-const nodeMetadata: INode = {
-  host: 'lavalink',
-  port: 2333,
-  secure: true,
-  password: 'password'
-}
-
 const moon = new MoonlinkManager([nodeMetadata], {},
   (guild: string, sPayload: string) =>
     client.guilds.cache.get(guild)?.shard.send(JSON.parse(sPayload)))
 
-moon.on('trackEnd', (player) => {
-  void playNextQueueItem(moon, player)
-})
-
-client.on('raw', (data: VoicePacket) => {
-  moon.packetUpdate(data)
-})
-
-client.on('ready', async () => {
+client.once('ready', async () => {
   const targetGuild = await client.guilds.fetch(GUILD_ID)
   const targetMember = await targetGuild.members.fetch(MEMBER_ID)
   const targetChannel = targetMember.voice.channelId
@@ -62,7 +54,17 @@ client.on('ready', async () => {
     autoPlay: false
   })
 
+  moon.once('playerCreated', () => {
+    void playNextQueueItem(moon, player)
+  })
+})
+
+moon.on('trackEnd', (player) => {
   void playNextQueueItem(moon, player)
+})
+
+client.on('raw', (data: VoicePacket) => {
+  moon.packetUpdate(data)
 })
 
 void client.login(DISCORD_TOKEN)
