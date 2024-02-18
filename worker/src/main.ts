@@ -38,28 +38,32 @@ const moon = new MoonlinkManager([nodeMetadata], {},
     client.guilds.cache.get(guild)?.shard.send(JSON.parse(sPayload)))
 
 client.once('ready', async (client) => {
-  const targetGuild = await client.guilds.fetch(GUILD_ID)
-  const targetMember = await targetGuild.members.fetch(MEMBER_ID)
-  const targetChannel = targetMember.voice.channelId
-
-  console.log('tagetChannel', targetChannel)
-
-  if (targetChannel === null) {
-    void client.destroy()
-    return
-  }
-
   moon.init(client.user.id)
+})
 
-  const player = moon.players.create({
-    guildId: GUILD_ID,
-    voiceChannel: targetChannel,
-    textChannel: targetChannel,
-    autoPlay: false
-  })
+moon.on('nodeCreate', () => {
+  void (async () => {
+    const targetGuild = await client.guilds.fetch(GUILD_ID)
+    const targetMember = await targetGuild.members.fetch(MEMBER_ID)
+    const targetChannel = targetMember.voice.channelId
 
-  console.log('player created')
-  void playNextQueueItem(moon, player)
+    console.log('targetChannel', targetChannel)
+
+    if (targetChannel === null) {
+      void client.destroy()
+      return
+    }
+
+    const player = moon.players.create({
+      guildId: GUILD_ID,
+      voiceChannel: targetChannel,
+      textChannel: targetChannel,
+      autoPlay: false
+    })
+
+    console.log('player created')
+    void playNextQueueItem(moon, player)
+  })()
 })
 
 moon.on('trackEnd', (player) => {
