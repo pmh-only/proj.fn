@@ -13,14 +13,14 @@ import (
 )
 
 func main() {
-	openClientGateway()
-	connectLavalinkNode()
-
 	client.AddEventListeners(bot.NewListenerFunc(func(event *events.GuildsReady) {
 		retrieveTargetChannel()
 		initPlayer()
 		playNext()
 	}))
+
+	openClientGateway()
+	connectLavalinkNode()
 
 	lavalinkClient.AddListeners(disgolink.NewListenerFunc(func(player disgolink.Player, event lavalink.TrackEndEvent) {
 		playNext()
