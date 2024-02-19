@@ -1,28 +1,24 @@
-FROM node:alpine AS build
+FROM alpine AS builder
 
-COPY . /app
-
-WORKDIR /app
-
-RUN npm i
-
-RUN npm run build
-
-FROM node:alpine AS dependency
-
-COPY --from=build /app/package.json /app/package-lock.json /app/
+RUN apk add go
 
 WORKDIR /app
 
-RUN npm i --omit=dev
+COPY go.mod go.sum /app/
 
-FROM alpine AS runtime
+RUN go mod download
 
-RUN apk add --no-cache nodejs
+COPY * /app/
 
-COPY --from=build /app/dist /app/dist
-COPY --from=dependency /app/node_modules /app/node_modules
+ENV CGO_ENABLED=0
+
+RUN go build -o /app/main .
+
+FROM scratch AS runtime
 
 WORKDIR /app
 
-CMD ["node", "dist/main.js"]
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder /app/main /app/main
+
+ENTRYPOINT ["/app/main"]
