@@ -18,8 +18,7 @@ func initClient() bot.Client {
 			// set enabled intents
 			gateway.WithIntents(
 				gateway.IntentGuilds,
-				gateway.IntentGuildMessages,
-				gateway.IntentDirectMessages,
+				gateway.IntentGuildVoiceStates,
 			),
 		),
 		bot.WithEventListenerFunc(onReady),
