@@ -6,6 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
 )
@@ -14,9 +16,11 @@ func main() {
 	openClientGateway()
 	connectLavalinkNode()
 
-	retrieveTargetChannel()
-	initPlayer()
-	playNext()
+	client.AddEventListeners(bot.NewListenerFunc(func(event *events.GuildsReady) {
+		retrieveTargetChannel()
+		initPlayer()
+		playNext()
+	}))
 
 	lavalinkClient.AddListeners(disgolink.NewListenerFunc(func(player disgolink.Player, event lavalink.TrackEndEvent) {
 		playNext()
