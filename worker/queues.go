@@ -36,7 +36,11 @@ func (queueItem QueueItem) GetKey() map[string]types.AttributeValue {
 }
 
 func getNextQueueItem() (queueItem *QueueItem, ok bool) {
-	keyExpr := expression.Key("GuildId").Equal(expression.Value(DISCORD_GUILD_ID.String()))
+	keyExpr := expression.Key("GuildId").Equal(
+		expression.Value(&types.AttributeValueMemberN{
+			Value: DISCORD_GUILD_ID.String(),
+		}))
+
 	expr, err := expression.NewBuilder().WithKeyCondition(keyExpr).Build()
 
 	if err != nil {
