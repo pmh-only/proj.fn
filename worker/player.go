@@ -21,6 +21,7 @@ func retrieveTargetChannel() {
 	if ok && voiceState.ChannelID != nil {
 		DISCORD_TARGET_CHANNEL_ID = voiceState.ChannelID
 		log.Printf("Target channel found: %s\n", voiceState.ChannelID.String())
+		return
 	}
 
 	log.Fatalln("Couldn't find target channel.")
