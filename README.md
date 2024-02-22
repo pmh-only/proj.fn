@@ -3,7 +3,7 @@ Lightweight Discord music streaming infra & application\
 powered by AWS serverless services (w. cross region)
 
 ## brief structure
-![](docs/projfn.drawio.png)
+![](docs/diagram.png)
 
 ## core components
 * `/worker` : container image for ecs tasks
