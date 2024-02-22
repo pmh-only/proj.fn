@@ -15,6 +15,8 @@ var DISCORD_GUILD_ID snowflake.ID = snowflake.MustParse(mustLoadEnv("DISCORD_GUI
 
 var DISCORD_MEMBER_ID snowflake.ID = snowflake.MustParse(mustLoadEnv("DISCORD_MEMBER_ID"))
 
+var LAVALINK_CONNECTION_URL string = loadEnv("LAVALINK_CONNECTION_URL", "127.0.0.1:2333")
+
 // ---
 
 func mustLoadEnv(env_name string) string {
@@ -27,4 +29,12 @@ func mustLoadEnv(env_name string) string {
 		env_name)
 
 	return ""
+}
+
+func loadEnv(env_name string, defaults string) string {
+	if env_value, ok := os.LookupEnv(env_name); ok {
+		return env_value
+	}
+
+	return defaults
 }

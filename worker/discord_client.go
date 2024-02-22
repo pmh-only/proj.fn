@@ -18,6 +18,7 @@ func initClient() bot.Client {
 		bot.WithGatewayConfigOpts(
 			gateway.WithIntents(
 				gateway.IntentGuilds,
+				gateway.IntentGuildVoiceStates,
 			),
 		),
 		bot.WithCacheConfigOpts(

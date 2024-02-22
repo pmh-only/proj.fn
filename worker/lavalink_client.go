@@ -13,7 +13,7 @@ var lavalinkClient disgolink.Client = disgolink.New(DISCORD_APPLICATION_ID)
 func connectLavalinkNode() {
 	_, err := lavalinkClient.AddNode(context.TODO(), disgolink.NodeConfig{
 		Name:      "lavalink",
-		Address:   "127.0.0.1:2333",
+		Address:   LAVALINK_CONNECTION_URL,
 		Password:  "password",
 		Secure:    false,
 		SessionID: "",
