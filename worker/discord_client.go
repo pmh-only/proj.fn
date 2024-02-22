@@ -7,6 +7,7 @@ import (
 	"github.com/disgoorg/disgo"
 	"github.com/disgoorg/disgo/bot"
 	"github.com/disgoorg/disgo/cache"
+	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgo/gateway"
 )
@@ -45,4 +46,11 @@ func openClientGateway() {
 func onReady(event *events.Ready) {
 	log.Printf("Application \"%s\" ready to serve",
 		event.User.Username)
+
+	editOriginalRespond(
+		event.Client(),
+		discord.NewMessageUpdateBuilder().
+			SetContent("Node controller connected. Waiting for player ready...").
+			Build(),
+	)
 }

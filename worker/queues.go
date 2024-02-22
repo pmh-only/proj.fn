@@ -15,6 +15,7 @@ type QueueItem struct {
 	GuildId          uint64 `dynamodbav:"GuildId"`
 	QueueId          uint64 `dynamodbav:"QueueId"`
 	VideoId          string `dynamodbav:"VideoId"`
+	MusicEmbed       string `dynamodbav:"MusicEmbed"`
 	MusicCurrentTime int    `dynamodbav:"MusicCurrentTime"`
 }
 

@@ -11,19 +11,26 @@ export class PlayCommand implements Command {
     const videoId = interaction.data.options?.find((v) => v.name === 'search')
 
     if (videoId === undefined) {
-      // TODO: unpause music
-
       const isWorkerAvailable = await checkWorkerAvailability(interaction.guild_id)
       if (!isWorkerAvailable) {
+        await editOriginalRespond(interaction.token, {
+          content: 'Creating a new player node...'
+        })
+
         await createWorker(
           interaction.guild_id,
           interaction.member.user.id,
-          'ap-northeast-2'
+          'ap-northeast-2',
+          interaction.token
         )
+
+        await editOriginalRespond(interaction.token, {
+          content: 'Waiting for the player node to come up...'
+        })
       }
 
       await editOriginalRespond(interaction.token, {
-        content: 'Ready'
+        content: 'Player node is already up state'
       })
 
       return
@@ -73,6 +80,27 @@ export class PlayCommand implements Command {
         musicCreator: musicEmbed.author.name,
         musicDuration: videoDuration
       })
+
+      const isWorkerAvailable = await checkWorkerAvailability(interaction.guild_id)
+      if (!isWorkerAvailable) {
+        await editOriginalRespond(interaction.token, {
+          content: 'Creating a new player node...',
+          embeds: [musicEmbed]
+        })
+
+        await createWorker(
+          interaction.guild_id,
+          interaction.member.user.id,
+          'ap-northeast-2',
+          interaction.token
+        )
+
+        await editOriginalRespond(interaction.token, {
+          content: 'Waiting for the player node to come up...',
+          embeds: [musicEmbed]
+        })
+        return
+      }
 
       await editOriginalRespond(interaction.token, {
         content: 'Ready for play',

@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/disgoorg/disgo/bot"
+	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
@@ -33,8 +35,22 @@ func main() {
 }
 
 func playNext() {
+	editOriginalRespond(
+		client,
+		discord.NewMessageUpdateBuilder().
+			SetContent("Tuning...").
+			Build(),
+	)
+
 	queueItem, ok := getNextQueueItem()
 	if ok && queueItem == nil {
+		editOriginalRespond(
+			client,
+			discord.NewMessageUpdateBuilder().
+				SetContent("Player finished all queues!").
+				Build(),
+		)
+
 		log.Println("Worker finished all queues")
 		stopPlayer()
 		os.Exit(0)
@@ -48,6 +64,19 @@ func playNext() {
 
 	if ok {
 		ok = playTrack(track)
+	}
+
+	if ok {
+		var embed discord.Embed
+		json.Unmarshal([]byte(queueItem.MusicEmbed), &embed)
+
+		editOriginalRespond(
+			client,
+			discord.NewMessageUpdateBuilder().
+				SetContent("Now playing...").
+				AddEmbeds(embed).
+				Build(),
+		)
 	}
 
 	if !ok {
