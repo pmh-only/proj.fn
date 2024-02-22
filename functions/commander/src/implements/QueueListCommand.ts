@@ -19,7 +19,7 @@ export class QueueListCommand implements Command {
           'Queue items:\n' +
           queue.map((item, i) =>
             `${i + 1}. ${item.musicTitle} -- ${item.musicCreator} ` +
-            `(${Math.floor(item.musicDuration / 60)}m (${item.musicDuration % 60}s, ` +
+            `(${Math.floor(item.musicDuration / 60)}m ${item.musicDuration % 60}s, ` +
             `added by <@${item.adderId}>)`).join('\n'),
       allowed_mentions: {
         parse: []

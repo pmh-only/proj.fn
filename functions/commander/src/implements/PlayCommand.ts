@@ -27,6 +27,7 @@ export class PlayCommand implements Command {
         await editOriginalRespond(interaction.token, {
           content: 'Waiting for the player node to come up...'
         })
+        return
       }
 
       await editOriginalRespond(interaction.token, {
