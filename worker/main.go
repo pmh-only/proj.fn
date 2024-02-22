@@ -23,6 +23,7 @@ func main() {
 	}))
 
 	lavalinkClient.AddListeners(disgolink.NewListenerFunc(func(player disgolink.Player, event lavalink.TrackEndEvent) {
+		removeNextQueueItem()
 		playNext()
 	}))
 
@@ -35,6 +36,7 @@ func playNext() {
 	queueItem, ok := getNextQueueItem()
 	if ok && queueItem == nil {
 		log.Println("Worker finished all queues")
+		stopPlayer()
 		os.Exit(0)
 	}
 

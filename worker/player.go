@@ -45,6 +45,12 @@ func initPlayer() {
 	log.Println("Player loaded.")
 }
 
+func stopPlayer() {
+	if err := client.UpdateVoiceState(context.TODO(), DISCORD_GUILD_ID, nil, false, false); err != nil {
+		log.Fatalf("Error while disconnecting: `%s`", err)
+	}
+}
+
 func loadTrack(queueItem QueueItem) (result lavalink.Track, ok bool) {
 	lavalinkClient.BestNode().LoadTracksHandler(
 		context.TODO(),
