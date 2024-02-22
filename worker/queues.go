@@ -12,8 +12,8 @@ import (
 )
 
 type QueueItem struct {
-	GuildId          string `dynamodbav:"GuildId"`
-	QueueId          string `dynamodbav:"QueueId"`
+	GuildId          uint64 `dynamodbav:"GuildId"`
+	QueueId          uint64 `dynamodbav:"QueueId"`
 	VideoId          string `dynamodbav:"VideoId"`
 	MusicCurrentTime int    `dynamodbav:"MusicCurrentTime"`
 }
