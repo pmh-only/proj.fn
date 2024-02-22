@@ -64,7 +64,8 @@ resource "aws_iam_role_policy" "task" {
         Action = [
           "dynamodb:GetItem",
           "dynamodb:PutItem",
-          "dynamodb:Query"
+          "dynamodb:Query",
+          "dynamodb:DeleteItem"
         ]
         Effect   = "Allow"
         Resource = [
