@@ -41,16 +41,11 @@ resource "aws_ecs_task_definition" "taskdef" {
     },
     { // lavalink
       name = "lavalink",
-      image = "ghcr.io/lavalink-devs/lavalink:4",
+      image = "ghcr.io/pmh-only/nodelink",
       essential = true,
       cpu = 128,
       memory = 412,
       memoryReservation = 412,
-      environment = [
-        { name = "_JAVA_OPTIONS", value: "-Xmx400M" },
-        { name = "SERVER_PORT", value: "2333" },
-        { name = "LAVALINK_SERVER_PASSWORD", value: "password" }
-      ],
       logConfiguration = {
         logDriver = "awslogs",
         options = {

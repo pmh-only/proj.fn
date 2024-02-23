@@ -14,7 +14,7 @@ func connectLavalinkNode() {
 	_, err := lavalinkClient.AddNode(context.TODO(), disgolink.NodeConfig{
 		Name:      "lavalink",
 		Address:   LAVALINK_CONNECTION_URL,
-		Password:  "password",
+		Password:  LAVALINK_PASSWORD,
 		Secure:    false,
 		SessionID: "",
 	})

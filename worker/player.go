@@ -54,7 +54,7 @@ func stopPlayer() {
 func loadTrack(queueItem QueueItem) (result lavalink.Track, ok bool) {
 	lavalinkClient.BestNode().LoadTracksHandler(
 		context.TODO(),
-		queueItem.VideoId,
+		"https://www.youtube.com/watch?v="+queueItem.VideoId,
 		disgolink.NewResultHandler(
 			func(track lavalink.Track) {
 				result = track

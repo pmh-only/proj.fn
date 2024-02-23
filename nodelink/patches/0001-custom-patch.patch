@@ -1,0 +1,85 @@
+From 7731929ae68f1aa43868e100f4a8b607d7cc0d1f Mon Sep 17 00:00:00 2001
+From: Minhyeok Park <pmh_only@pmh.codes>
+Date: Fri, 23 Feb 2024 15:45:45 +0900
+Subject: [PATCH] custom patch
+
+---
+ config.js                 |  2 +-
+ src/connection/handler.js |  6 +++---
+ src/utils.js              | 16 ++--------------
+ 3 files changed, 6 insertions(+), 18 deletions(-)
+
+diff --git a/config.js b/config.js
+index 8593e3b..23c5dba 100644
+--- a/config.js
++++ b/config.js
+@@ -13,7 +13,7 @@ export default {
+   },
+   "server": {
+     "port": 2333,
+-    "password": "youshallnotpass",
++    "password": process.env.LAVALINK_PASSWORD || 'youshallnotpass',
+     "resumeTimeout": 10000,
+   },
+   "options": {
+diff --git a/src/connection/handler.js b/src/connection/handler.js
+index e172882..cd6aa1f 100644
+--- a/src/connection/handler.js
++++ b/src/connection/handler.js
+@@ -692,7 +692,7 @@ async function requestHandler(req, res) {
+ 
+     client.players.forEach((player) => {
+       player.config.state = {
+-        time: new Date(),
++        time: Date.now(),
+         position: player.connection ? player.connection.playerState.status == 'playing' ? player._getRealTime() : 0 : 0,
+         connected: player.connection ? player.connection.state.status == 'ready' : false,
+         ping: player.connection ? player.connection.state.status == 'ready' ? player.connection.ping : -1 : -1
+@@ -799,7 +799,7 @@ async function requestHandler(req, res) {
+         }
+ 
+         player.config.state = {
+-          time: new Date(),
++          time: Date.now(),
+           position: player.connection ? player.connection.playerState.status == 'playing' ? player._getRealTime() : 0 : 0,
+           connected: player.connection ? player.connection.state.status == 'ready' : false,
+           ping: player.connection ? player.connection.state.status == 'ready' ? player.connection.ping : -1 : -1
+@@ -996,7 +996,7 @@ async function requestHandler(req, res) {
+         }
+ 
+         player.config.state = {
+-          time: new Date(),
++          time: Date.now(),
+           position: player.connection ? player.connection.playerState.status == 'playing' ? player._getRealTime() : 0 : 0,
+           connected: player.connection ? player.connection.state.status == 'ready' : false,
+           ping: player.connection ? player.connection.state.status == 'ready' ? player.connection.ping : -1 : -1
+diff --git a/src/utils.js b/src/utils.js
+index 3e5dda6..02d7a3c 100644
+--- a/src/utils.js
++++ b/src/utils.js
+@@ -844,20 +844,8 @@ export function sendResponse(req, res, data, status) {
+     return true
+   }
+ 
+-  if (!req.headers || !req.headers['accept-encoding']) {
+-    res.writeHead(status, { 'Content-Type': 'application/json' })
+-    res.end(JSON.stringify(data))
+-  }
+-
+-  if (req.headers && req.headers['accept-encoding']) {
+-    res.setHeader('Content-Encoding', 'br')
+-    res.writeHead(status, { 'Content-Type': 'application/json', 'Content-Encoding': 'br' })
+-
+-    zlib.brotliCompress(JSON.stringify(data), (err, result) => {
+-      if (err) throw err
+-      res.end(result)
+-    })
+-  }
++  res.writeHead(status, { 'Content-Type': 'application/json' })
++  res.end(JSON.stringify(data))
+ 
+   return true
+ }
+-- 
+2.43.0.windows.1
+

@@ -5,8 +5,4 @@ services:
     env_file:
       - .env
   lavalink:
-    image: ghcr.io/lavalink-devs/lavalink:4
-    environment:
-      - _JAVA_OPTIONS=-Xmx400M
-      - SERVER_PORT=2333
-      - LAVALINK_SERVER_PASSWORD=password
+    build: ./nodelink

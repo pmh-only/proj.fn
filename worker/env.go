@@ -19,6 +19,8 @@ var DISCORD_INTERACTION_TOKEN *string = loadEnvOptional("DISCORD_INTERACTION_TOK
 
 var LAVALINK_CONNECTION_URL string = loadEnv("LAVALINK_CONNECTION_URL", "127.0.0.1:2333")
 
+var LAVALINK_PASSWORD string = loadEnv("LAVALINK_PASSWORD", "youshallnotpass")
+
 // ---
 
 func mustLoadEnv(env_name string) string {
