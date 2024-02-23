@@ -34,7 +34,7 @@ resource "aws_ecs_task_definition" "taskdef" {
         options = {
           "awslogs-create-group" = "true",
           "awslogs-group" = "/ecs/projfn-worker",
-          "awslogs-region" = "ap-northeast-2",
+          "awslogs-region" = data.aws_region.current.name,
           "awslogs-stream-prefix" = "controller"
         }
       }
@@ -51,7 +51,7 @@ resource "aws_ecs_task_definition" "taskdef" {
         options = {
           "awslogs-create-group" = "true",
           "awslogs-group" = "/ecs/projfn-worker",
-          "awslogs-region" = "ap-northeast-2",
+          "awslogs-region" = data.aws_region.current.name,
           "awslogs-stream-prefix" = "lavalink"
         }
       }
