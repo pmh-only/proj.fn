@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'worker/**'
+      - 'nodelink/**'
 
 permissions:
   contents: write
