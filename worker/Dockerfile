@@ -8,11 +8,11 @@ COPY go.mod go.sum /app/
 
 RUN go mod download
 
-COPY * /app/
+COPY . /app/
 
 ENV CGO_ENABLED=0
 
-RUN go build -o /app/main .
+RUN go build -o /app/main
 
 FROM scratch AS runtime
 

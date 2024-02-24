@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -9,6 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
+	"github.com/pmh-only/proj.fn/worker/env"
 )
 
 type QueueItem struct {
@@ -36,10 +37,10 @@ func (queueItem QueueItem) GetKey() map[string]types.AttributeValue {
 	}
 }
 
-func getNextQueueItem() (queueItem *QueueItem, ok bool) {
+func (db DB) GetNextQueueItem() (queueItem *QueueItem, ok bool) {
 	keyExpr := expression.Key("GuildId").Equal(
 		expression.Value(&types.AttributeValueMemberN{
-			Value: DISCORD_GUILD_ID.String(),
+			Value: env.DISCORD_GUILD_ID.String(),
 		}))
 
 	expr, err := expression.NewBuilder().WithKeyCondition(keyExpr).Build()
@@ -49,7 +50,7 @@ func getNextQueueItem() (queueItem *QueueItem, ok bool) {
 		return nil, false
 	}
 
-	queryPaginator := dynamodb.NewQueryPaginator(&dynamodbClient, &dynamodb.QueryInput{
+	queryPaginator := dynamodb.NewQueryPaginator(&db.client, &dynamodb.QueryInput{
 		TableName:                 aws.String("projfn-music-queue"),
 		ExpressionAttributeNames:  expr.Names(),
 		ExpressionAttributeValues: expr.Values(),
@@ -61,7 +62,7 @@ func getNextQueueItem() (queueItem *QueueItem, ok bool) {
 		response, err := queryPaginator.NextPage(context.TODO())
 
 		if err != nil {
-			log.Printf("Couldn't query queue for %v. Here's why: %v\n", DISCORD_GUILD_ID, err)
+			log.Printf("Couldn't query queue for %v. Here's why: %v\n", env.DISCORD_GUILD_ID, err)
 			return nil, false
 		}
 
@@ -82,13 +83,13 @@ func getNextQueueItem() (queueItem *QueueItem, ok bool) {
 	return queueItem, true
 }
 
-func removeNextQueueItem() {
-	queueItem, ok := getNextQueueItem()
+func (db DB) RemoveNextQueueItem() {
+	queueItem, ok := db.GetNextQueueItem()
 	if !ok {
 		return
 	}
 
-	_, err := dynamodbClient.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
+	_, err := db.client.DeleteItem(context.TODO(), &dynamodb.DeleteItemInput{
 		TableName: aws.String("projfn-music-queue"),
 		Key:       queueItem.GetKey(),
 	})

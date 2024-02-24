@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"context"
@@ -8,14 +8,22 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb"
 )
 
-var dynamodbClient dynamodb.Client =
-	*initDynamoDBClient()
+type DB struct {
+	client dynamodb.Client
+}
 
-func initDynamoDBClient() *dynamodb.Client {
+func New() DB {
+	db := new(DB)
+	db.initDynamoDBClient()
+
+	return *db
+}
+
+func (db *DB) initDynamoDBClient() {
 	cfg, err := config.LoadDefaultConfig(context.TODO())
 	if err != nil {
 		log.Fatalf("Unable to load DynamoDB SDK config, %v", err)
 	}
 
-	return dynamodb.NewFromConfig(cfg)
+	db.client = *dynamodb.NewFromConfig(cfg)
 }
