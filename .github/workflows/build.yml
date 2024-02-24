@@ -34,7 +34,7 @@ jobs:
         with:
           push: true
           context: worker
-          platforms: linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/pmh-only/projfn:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -60,7 +60,7 @@ jobs:
         with:
           push: true
           context: nodelink
-          platforms: linux/arm64
+          platforms: linux/amd64
           tags: ghcr.io/pmh-only/nodelink:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max

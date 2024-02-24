@@ -14,10 +14,6 @@ resource "aws_ecs_task_definition" "taskdef" {
   network_mode = "awsvpc"
   task_role_arn = var.iam_role_task_arn
   execution_role_arn = var.iam_role_taskexec_arn
-  runtime_platform {
-    operating_system_family = "LINUX"
-    cpu_architecture = "ARM64"
-  }
   container_definitions = jsonencode([
     { // controller
       name = "controller",
