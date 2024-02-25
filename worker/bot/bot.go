@@ -31,8 +31,8 @@ func (b Bot) Init() {
 	b.initLavalink()
 	b.initClient()
 
-	b.openGateway()
 	b.connectLavalink()
+	b.openGateway()
 }
 
 func (b *Bot) initClient() {

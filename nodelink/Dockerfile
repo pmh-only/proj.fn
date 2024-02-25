@@ -22,7 +22,7 @@ FROM nodejs AS deps_resolver
 
 WORKDIR /app
 
-RUN apk add npm
+RUN apk add npm python3 make gcc g++ musl-dev
 
 COPY --from=patcher /app/package.json /app/package.json
 
