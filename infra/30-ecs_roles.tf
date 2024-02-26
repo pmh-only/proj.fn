@@ -31,6 +31,22 @@ resource "aws_iam_role_policy" "taskexec" {
         Resource = [
           "arn:aws:logs:*:${data.aws_caller_identity.current.account_id}:log-group:/ecs/projfn-worker:log-stream:*"
         ]
+      },
+      {
+        Action = [
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer"
+        ]
+        Effect   = "Allow"
+        Resource = [
+          "arn:aws:ecr:*:${data.aws_caller_identity.current.account_id}:repository/projfn-worker-controller",
+          "arn:aws:ecr:*:${data.aws_caller_identity.current.account_id}:repository/projfn-worker-nodelink"
+        ]
+      },
+      {
+          "Effect": "Allow",
+          "Action": "ecr:GetAuthorizationToken",
+          "Resource": "*"
       }
     ]
   })

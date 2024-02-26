@@ -21,7 +21,7 @@ resource "aws_ecs_task_definition" "taskdef" {
   container_definitions = jsonencode([
     { // controller
       name = "controller",
-      image = "ghcr.io/pmh-only/projfn",
+      image = aws_ecr_repository.controller.repository_url,
       essential = true,
       cpu = 128,
       memory = 100,
@@ -45,7 +45,7 @@ resource "aws_ecs_task_definition" "taskdef" {
     },
     { // lavalink
       name = "lavalink",
-      image = "ghcr.io/pmh-only/nodelink",
+      image = aws_ecr_repository.nodelink.repository_url,
       essential = true,
       cpu = 128,
       memory = 412,
