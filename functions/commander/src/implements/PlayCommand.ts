@@ -75,7 +75,7 @@ export class PlayCommand implements Command {
       await addQueue({
         guildId: interaction.guild_id ?? '0',
         adderId: interaction.member?.user.id ?? '',
-        videoId: videoId.value,
+        videoId: videoDetails.videoId,
         musicEmbed: JSON.stringify(musicEmbed),
         musicTitle: musicEmbed.title,
         musicCreator: musicEmbed.author.name,
