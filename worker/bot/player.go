@@ -27,8 +27,6 @@ func (b *Bot) retrieveTargetChannel() {
 }
 
 func (b *Bot) initPlayer() {
-	b.player = b.lavalink.Player(env.DISCORD_GUILD_ID)
-
 	err := b.client.UpdateVoiceState(
 		context.TODO(),
 		env.DISCORD_GUILD_ID,
@@ -56,6 +54,8 @@ func (b Bot) stopPlayer() {
 }
 
 func (b Bot) playNext() {
+	player := b.lavalink.Player(env.DISCORD_GUILD_ID)
+
 	b.respond(
 		discord.NewMessageUpdateBuilder().
 			SetContent("Tuning...").
@@ -82,7 +82,7 @@ func (b Bot) playNext() {
 	}
 
 	if ok {
-		ok = b.playTrack(track)
+		ok = b.playTrack(player, track)
 	}
 
 	if ok {

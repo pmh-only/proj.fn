@@ -4,12 +4,26 @@ import (
 	"context"
 	"log"
 
+	"github.com/disgoorg/disgo/bot"
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 	"github.com/disgoorg/disgolink/v3/disgolink"
 	"github.com/disgoorg/disgolink/v3/lavalink"
 	"github.com/pmh-only/proj.fn/worker/env"
 )
+
+func (b Bot) loadEvents() {
+	b.client.AddEventListeners(
+		bot.NewListenerFunc(b.onReady),
+		bot.NewListenerFunc(b.onGuildsReady),
+		bot.NewListenerFunc(b.onVoiceStateUpdate),
+		bot.NewListenerFunc(b.onVoiceServerUpdate),
+	)
+
+	b.lavalink.AddListeners(
+		disgolink.NewListenerFunc(b.onTrackEndEvent),
+	)
+}
 
 func (b Bot) onReady(event *events.Ready) {
 	b.client = event.Client()
@@ -53,9 +67,6 @@ func (b Bot) onVoiceServerUpdate(event *events.VoiceServerUpdate) {
 }
 
 func (b Bot) onTrackEndEvent(player disgolink.Player, event lavalink.TrackEndEvent) {
-	b.lavalink = player.Lavalink()
-	b.player = player
-
 	b.db.RemoveNextQueueItem()
 	b.playNext()
 }

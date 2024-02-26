@@ -6,13 +6,13 @@ WORKDIR /app
 
 COPY go.mod go.sum /app/
 
-RUN go mod download
+RUN --mount=type=cache,target=/root/.cache/go-build go mod download
 
 COPY . /app/
 
 ENV CGO_ENABLED=0
 
-RUN go build -o /app/main
+RUN --mount=type=cache,target=/root/.cache/go-build go build -o /app/main
 
 FROM scratch AS runtime
 

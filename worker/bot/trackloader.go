@@ -35,8 +35,8 @@ func (b Bot) loadTrack(queueItem db.QueueItem) (result lavalink.Track, ok bool) 
 	return
 }
 
-func (b Bot) playTrack(track lavalink.Track) (ok bool) {
-	err := b.player.Update(context.TODO(), lavalink.WithTrack(track))
+func (b Bot) playTrack(player disgolink.Player, track lavalink.Track) (ok bool) {
+	err := player.Update(context.TODO(), lavalink.WithTrack(track))
 	if err != nil {
 		log.Println(err)
 	}

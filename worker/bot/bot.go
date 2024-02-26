@@ -17,7 +17,6 @@ import (
 type Bot struct {
 	client          bot.Client
 	lavalink        disgolink.Client
-	player          disgolink.Player
 	targetChannelId *snowflake.ID
 	db              db.DB
 }
@@ -28,8 +27,10 @@ func New() *Bot {
 
 func (b Bot) Init() {
 	b.initDB()
-	b.initLavalink()
 	b.initClient()
+	b.initLavalink()
+
+	b.loadEvents()
 
 	b.connectLavalink()
 	b.openGateway()
@@ -46,10 +47,6 @@ func (b *Bot) initClient() {
 		bot.WithCacheConfigOpts(
 			cache.WithCaches(cache.FlagVoiceStates),
 		),
-		bot.WithEventListenerFunc(b.onReady),
-		bot.WithEventListenerFunc(b.onGuildsReady),
-		bot.WithEventListenerFunc(b.onVoiceStateUpdate),
-		bot.WithEventListenerFunc(b.onVoiceServerUpdate),
 	)
 
 	if err != nil {
@@ -60,8 +57,7 @@ func (b *Bot) initClient() {
 }
 
 func (b *Bot) initLavalink() {
-	b.lavalink = disgolink.New(env.DISCORD_APPLICATION_ID,
-		disgolink.WithListenerFunc(b.onTrackEndEvent))
+	b.lavalink = disgolink.New(env.DISCORD_APPLICATION_ID)
 
 	log.Println("Discord client initialized")
 }
