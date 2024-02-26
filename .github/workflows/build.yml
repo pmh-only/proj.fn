@@ -64,4 +64,43 @@ jobs:
           tags: ghcr.io/pmh-only/nodelink:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
+  copy-worker:
+    name: Copy ghcr image to ecr
+    runs-on: ubuntu-latest
+    needs: build-worker
+    strategy:
+      matrix:
+        regions:
+          - ap-northeast-2
+    steps:
+      - name: Login to ECR
+        uses: jwalton/gh-ecr-login@v1
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ matrix.regions }}
+      - name: Copy image
+        run: |
+          docker pull ghcr.io/pmh-only/proj.fn
+          docker tag ghcr.io/pmh-only/proj.fn ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-controller
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-controller
+  copy-nodelink:
+    name: Copy ghcr image to ecr
+    runs-on: ubuntu-latest
+    needs: build-worker
+    strategy:
+      matrix:
+        regions:
+          - ap-northeast-2
+    steps:
+      - name: Login to ECR
+        uses: jwalton/gh-ecr-login@v1
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ matrix.regions }}
+      - name: Copy image
+        run: |
+          docker pull ghcr.io/pmh-only/nodelink
+          docker tag ghcr.io/pmh-only/nodelink ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-nodelink
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-nodelink
