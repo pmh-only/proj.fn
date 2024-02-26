@@ -81,7 +81,7 @@ jobs:
           region: ${{ matrix.regions }}
       - name: Copy image
         run: |
-          docker pull ghcr.io/pmh-only/proj.fn
+          docker pull --platform linux/arm64 ghcr.io/pmh-only/proj.fn
           docker tag ghcr.io/pmh-only/proj.fn ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-controller
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-controller
   copy-nodelink:
@@ -101,6 +101,6 @@ jobs:
           region: ${{ matrix.regions }}
       - name: Copy image
         run: |
-          docker pull ghcr.io/pmh-only/nodelink
+          docker pull --platform linux/arm64 ghcr.io/pmh-only/nodelink
           docker tag ghcr.io/pmh-only/nodelink ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-nodelink
           docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ matrix.regions }}.amazonaws.com/projfn-worker-nodelink
