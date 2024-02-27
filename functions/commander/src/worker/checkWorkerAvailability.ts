@@ -33,7 +33,9 @@ export const checkWorkerAvailability = async (guildId: string): Promise<boolean>
     'DELETED'
   ]
 
-  if (negativeStatuses.includes(task.lastStatus ?? '')) {
+  if (
+    negativeStatuses.includes(task.lastStatus ?? '') ||
+    task.desiredStatus !== 'RUNNING') {
     return false
   }
 
