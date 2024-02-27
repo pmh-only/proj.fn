@@ -24,7 +24,7 @@ export class SearchAutocompleterImpl implements Autocompleter {
       .slice(0, 10)
       .map((v) => ({
         name: `${v.title} -- ${v.author?.name ?? 'unknown'} (${v.duration}) (${v.uploadedAt})`.slice(0, 100),
-        value: v.id
+        value: `https://youtu.be/${v.id}`
       }))
 
     return choices

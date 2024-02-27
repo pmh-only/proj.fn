@@ -5,6 +5,7 @@ import { addQueue } from '../queuing/addQueue'
 import { checkWorkerAvailability } from '../worker/checkWorkerAvailability'
 import { createWorker } from '../worker/createWorker'
 import { editOriginalRespond } from '../responder/editOriginalRespond'
+import ytsr, { type Video } from 'ytsr'
 
 export class PlayCommand implements Command {
   public run = async (interaction: APIChatInputApplicationCommandGuildInteraction): Promise<any> => {
@@ -39,6 +40,20 @@ export class PlayCommand implements Command {
 
     // Display search results
     if (videoId?.type === ApplicationCommandOptionType.String) {
+      const validPathDomains = /^https?:\/\/(youtu\.be\/|(www\.)?youtube\.com\/(embed|v|shorts)\/)/
+      if (!validPathDomains.test(videoId.value.trim())) {
+        const searchResult = await ytsr(videoId.value, {
+          limit: 1,
+          gl: 'ko'
+        }).catch(() => ({ items: [] }))
+
+        const filteredResults = (searchResult.items
+          .filter((v) => v.type === 'video') as Video[])
+          .filter((v) => !v.isLive && !v.isUpcoming)
+
+        videoId.value = filteredResults[0].url
+      }
+
       const { videoDetails } = await getBasicInfo(videoId.value)
         .catch(() => ({ videoDetails: undefined }))
 

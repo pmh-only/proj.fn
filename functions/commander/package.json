@@ -26,6 +26,7 @@
     "@aws-sdk/client-ecs": "^3.511.0",
     "discord-api-types": "^0.37.69",
     "undici": "^6.6.2",
-    "ytdl-core": "^4.11.5"
+    "ytdl-core": "^4.11.5",
+    "ytsr": "^3.8.4"
   }
 }
