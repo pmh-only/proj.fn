@@ -22,6 +22,7 @@ func (b Bot) loadEvents() {
 
 	b.lavalink.AddListeners(
 		disgolink.NewListenerFunc(b.onTrackEndEvent),
+		disgolink.NewListenerFunc(b.onPlayerUpdate),
 	)
 }
 
@@ -39,8 +40,6 @@ func (b Bot) onReady(event *events.Ready) {
 }
 
 func (b Bot) onGuildsReady(event *events.GuildsReady) {
-	b.client = event.Client()
-
 	b.retrieveTargetChannel()
 	b.initPlayer()
 	b.playNext()
@@ -69,4 +68,10 @@ func (b Bot) onVoiceServerUpdate(event *events.VoiceServerUpdate) {
 func (b Bot) onTrackEndEvent(player disgolink.Player, event lavalink.TrackEndEvent) {
 	b.db.RemoveNextQueueItem()
 	b.playNext()
+}
+
+func (b Bot) onPlayerUpdate(player disgolink.Player, event lavalink.PlayerUpdateMessage) {
+	b.respond(discord.NewMessageUpdateBuilder().
+		SetContentf("Now playing. (%dm %ds)", event.State.Position.Minutes(), event.State.Position.SecondsPart()).
+		Build())
 }

@@ -14,7 +14,7 @@ COPY patches /patches
 
 RUN git clone https://github.com/PerformanC/NodeLink.git .
 
-RUN git apply /patches/0001-custom-patch.patch
+RUN git apply /patches/*.patch
 
 # ---
 

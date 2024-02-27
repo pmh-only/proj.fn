@@ -1,19 +1,8 @@
-From 7731929ae68f1aa43868e100f4a8b607d7cc0d1f Mon Sep 17 00:00:00 2001
-From: Minhyeok Park <pmh_only@pmh.codes>
-Date: Fri, 23 Feb 2024 15:45:45 +0900
-Subject: [PATCH] custom patch
-
----
- config.js                 |  2 +-
- src/connection/handler.js |  6 +++---
- src/utils.js              | 16 ++--------------
- 3 files changed, 6 insertions(+), 18 deletions(-)
-
 diff --git a/config.js b/config.js
-index 8593e3b..23c5dba 100644
+index 8593e3b..4b66586 100644
 --- a/config.js
 +++ b/config.js
-@@ -13,7 +13,7 @@ export default {
+@@ -13,12 +13,12 @@ export default {
    },
    "server": {
      "port": 2333,
@@ -22,6 +11,19 @@ index 8593e3b..23c5dba 100644
      "resumeTimeout": 10000,
    },
    "options": {
+     "threshold": false,
+-    "playerUpdateInterval": false,
++    "playerUpdateInterval": 5000,
+     "statsInterval": false,
+     "autoUpdate": [ false, true, 3600000, "tar" ],
+     "maxResultsLength": 200,
+@@ -146,4 +146,4 @@ export default {
+   "voiceReceive": {
+     "audioType": "ogg/opus" // ogg/opus or opus
+   }
+-}
+\ No newline at end of file
++}
 diff --git a/src/connection/handler.js b/src/connection/handler.js
 index e172882..cd6aa1f 100644
 --- a/src/connection/handler.js
@@ -80,6 +82,3 @@ index 3e5dda6..02d7a3c 100644
  
    return true
  }
--- 
-2.43.0.windows.1
-
