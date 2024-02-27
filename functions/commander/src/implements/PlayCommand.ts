@@ -70,7 +70,6 @@ export class PlayCommand implements Command {
         color: 0xff0000,
         title: videoDetails.title,
         url: videoDetails.video_url,
-        description: (videoDetails.description?.slice(0, 100) + ((videoDetails.description?.length ?? 0) > 100 ? '...' : '')) ?? 'Empty',
         author: {
           name: videoDetails.author.name,
           url: videoDetails.author.user_url,
@@ -78,13 +77,7 @@ export class PlayCommand implements Command {
         },
         image: {
           url: videoDetails.thumbnails.sort((a, b) => a.height - b.height).reverse()[0].url
-        },
-        fields: [{
-          name: 'Duration',
-          inline: true,
-          value: `${Math.floor(videoDuration / 60)}m ${videoDuration % 60}s`
-        }],
-        timestamp: videoDetails.uploadDate
+        }
       }
 
       await addQueue({
