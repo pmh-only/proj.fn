@@ -37,7 +37,7 @@ export class SkipCommand implements Command {
       return
     }
 
-    const workerApiUrl = `http://${workerPublicIp}:${REST_API_PORT}/skip`
+    const workerApiUrl = `http://${workerPublicIp}:${REST_API_PORT}/playNext`
     const res = await fetch(workerApiUrl, {
       method: 'POST',
       headers: {
