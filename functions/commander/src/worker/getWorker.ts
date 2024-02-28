@@ -15,6 +15,10 @@ export const getWorker = async (workerInfo: Worker): Promise<Task | undefined> =
   const { tasks = [] } = await ecsClient.send(describeTaskCommand)
   const task = tasks[0]
 
+  if (task === undefined) {
+    return undefined
+  }
+
   const negativeStatuses = [
     'DEACTIVATING',
     'STOPPING',
