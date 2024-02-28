@@ -30,4 +30,16 @@ variable "discord_target_guild_id" {
   nullable = false
 }
 
+variable "lavalink_password" {
+  description = "The password for the lavalink server"
+  type = string
+  sensitive = true
+}
+
+variable "rest_api_secret" {
+  description = "The secret for the rest api"
+  type = string
+  sensitive = true
+}
+
 data "aws_caller_identity" "current" {}

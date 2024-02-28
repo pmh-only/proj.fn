@@ -58,7 +58,10 @@ resource "aws_ecs_task_definition" "taskdef" {
           "awslogs-region" = data.aws_region.current.name,
           "awslogs-stream-prefix" = "lavalink"
         }
-      }
+      },
+      environment = [
+        { name = "LAVALINK_PASSWORD", value = var.lavalink_password }
+      ]
     }
   ])
 }

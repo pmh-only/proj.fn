@@ -1,6 +1,12 @@
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb'
 import { ECSClient, RunTaskCommand } from '@aws-sdk/client-ecs'
-const { DISCORD_BOT_TOKEN, REGIONAL_DATA, DISCORD_APPLICATION_ID } = process.env
+const {
+  DISCORD_BOT_TOKEN,
+  REGIONAL_DATA,
+  DISCORD_APPLICATION_ID,
+  LAVALINK_PASSWORD,
+  REST_API_SECRET
+} = process.env
 
 export const createWorker = async (
   guildId: string,
@@ -25,7 +31,9 @@ export const createWorker = async (
           { name: 'DISCORD_APPLICATION_ID', value: DISCORD_APPLICATION_ID },
           { name: 'DISCORD_GUILD_ID', value: guildId },
           { name: 'DISCORD_MEMBER_ID', value: memberId },
-          { name: 'DISCORD_INTERACTION_TOKEN', value: interactionToken }
+          { name: 'DISCORD_INTERACTION_TOKEN', value: interactionToken },
+          { name: 'LAVALINK_PASSWORD', value: LAVALINK_PASSWORD },
+          { name: 'REST_API_SECRET', value: REST_API_SECRET }
         ]
       }]
     },

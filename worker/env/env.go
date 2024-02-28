@@ -21,6 +21,10 @@ var LAVALINK_CONNECTION_URL string = loadEnv("LAVALINK_CONNECTION_URL", "127.0.0
 
 var LAVALINK_PASSWORD string = loadEnv("LAVALINK_PASSWORD", "youshallnotpass")
 
+var REST_API_PORT string = loadEnv("REST_API_PORT", "8080")
+
+var REST_API_SECRET string = loadEnv("REST_API_SECRET", "youshallnotpass")
+
 // ---
 
 func mustLoadEnv(env_name string) string {

@@ -31,9 +31,11 @@ func (b Bot) Init() {
 	b.initLavalink()
 
 	b.loadEvents()
+	b.loadRestHandler()
 
 	b.connectLavalink()
 	b.openGateway()
+	b.restListenAndServe()
 }
 
 func (b *Bot) initClient() {
