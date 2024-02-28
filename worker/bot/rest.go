@@ -8,7 +8,7 @@ import (
 )
 
 func (b Bot) loadRestHandler() {
-	http.HandleFunc("/skip", b.blockUnauthorized(b.onSkipRequest))
+	http.HandleFunc("/playNext", b.blockUnauthorized(b.onPlayNextRequest))
 }
 
 func (b Bot) restListenAndServe() {
