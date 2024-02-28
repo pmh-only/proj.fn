@@ -12,7 +12,7 @@ func (b Bot) loadRestHandler() {
 }
 
 func (b Bot) restListenAndServe() {
-	log.Fatalln(http.ListenAndServe(env.REST_API_PORT, nil))
+	log.Fatalln(http.ListenAndServe("0.0.0.0:"+env.REST_API_PORT, nil))
 }
 
 func (b Bot) blockUnauthorized(handler func(w http.ResponseWriter, r *http.Request)) func(w http.ResponseWriter, r *http.Request) {
