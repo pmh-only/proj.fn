@@ -1,25 +1,33 @@
-import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb'
+import { type Task } from '@aws-sdk/client-ecs'
 import { type Worker } from './Worker'
+import { DescribeTasksCommand, ECSClient } from '@aws-sdk/client-ecs'
 
-export const getWorker = async (guildId: string): Promise<Worker | undefined> => {
-  const client = new DynamoDBClient({})
-
-  const getItemCommad = new GetItemCommand({
-    TableName: 'projfn-music-workers',
-    Key: {
-      GuildId: { N: guildId }
-    }
+export const getWorker = async (workerInfo: Worker): Promise<Task | undefined> => {
+  const ecsClient = new ECSClient({
+    region: workerInfo.region
   })
 
-  const { Item } = await client.send(getItemCommad)
-  if (Item === undefined) {
+  const describeTaskCommand = new DescribeTasksCommand({
+    cluster: 'projfn-cluster',
+    tasks: [workerInfo.taskArn]
+  })
+
+  const { tasks = [] } = await ecsClient.send(describeTaskCommand)
+  const task = tasks[0]
+
+  const negativeStatuses = [
+    'DEACTIVATING',
+    'STOPPING',
+    'DEPROVISIONING',
+    'STOPPED',
+    'DELETED'
+  ]
+
+  if (
+    negativeStatuses.includes(task.lastStatus ?? '') ||
+    task.desiredStatus !== 'RUNNING') {
     return undefined
   }
 
-  return {
-    guildId: Item.GuildId.N ?? '0',
-    region: Item.Region.S ?? '',
-    taskArn: Item.TaskARN.S ?? '',
-    workerCreatedAt: new Date(Item.WorkerCreatedAt.S ?? '')
-  }
+  return task
 }

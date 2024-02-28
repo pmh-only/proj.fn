@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.511.0",
+    "@aws-sdk/client-ec2": "^3.523.0",
     "@aws-sdk/client-ecs": "^3.511.0",
     "discord-api-types": "^0.37.69",
     "undici": "^6.6.2",

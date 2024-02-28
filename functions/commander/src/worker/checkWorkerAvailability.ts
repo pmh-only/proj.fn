@@ -1,41 +1,14 @@
-import { DescribeTasksCommand, ECSClient } from '@aws-sdk/client-ecs'
 import { getWorker } from './getWorker'
+import { getWorkerInfo } from './getWorkerInfo'
 
 export const checkWorkerAvailability = async (guildId: string): Promise<boolean> => {
-  const worker = await getWorker(guildId)
+  const workerInfo = await getWorkerInfo(guildId)
+  if (workerInfo === undefined) {
+    return false
+  }
+
+  const worker = await getWorker(workerInfo)
   if (worker === undefined) {
-    return false
-  }
-
-  const client = new ECSClient({
-    region: worker.region
-  })
-
-  const describeTaskCommand = new DescribeTasksCommand({
-    cluster: 'projfn-cluster',
-    tasks: [
-      worker.taskArn
-    ]
-  })
-
-  const { tasks = [] } = await client.send(describeTaskCommand)
-  const task = tasks[0]
-
-  if (task === undefined) {
-    return false
-  }
-
-  const negativeStatuses = [
-    'DEACTIVATING',
-    'STOPPING',
-    'DEPROVISIONING',
-    'STOPPED',
-    'DELETED'
-  ]
-
-  if (
-    negativeStatuses.includes(task.lastStatus ?? '') ||
-    task.desiredStatus !== 'RUNNING') {
     return false
   }
 

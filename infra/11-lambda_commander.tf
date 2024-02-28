@@ -88,6 +88,8 @@ resource "aws_lambda_function" "commander" {
       DISCORD_APPLICATION_ID = var.discord_application_id
       DISCORD_BOT_TOKEN = var.discord_bot_token
       REGIONAL_DATA = local.regional_data
+      LAVALINK_PASSWORD = var.lavalink_password,
+      REST_API_SECRET = var.rest_api_secret
     }
   }
 }
